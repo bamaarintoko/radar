@@ -52,8 +52,8 @@ export default class App extends Component<Props> {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 this.setState({
-                    latitude : position.coords.latitude,
-                    longitude : position.coords.longitude
+                    latitude : -7.795580,
+                    longitude : 110.369490
                 })
                 console.log("--->",position.coords.latitude)
                 console.log("--->",position.coords.longitude)
@@ -85,8 +85,15 @@ export default class App extends Component<Props> {
                         />
                         <MapView.Marker
                             coordinate={{
-                                latitude: 37.424119,
-                                longitude: -122.103432
+                                latitude: -7.800972499999999,
+                                longitude: 110.3622568
+                            }}
+                            onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
+                        />
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: -7.7835968,
+                                longitude: 110.3777088
                             }}
                             onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
                         />
