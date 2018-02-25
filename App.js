@@ -83,6 +83,13 @@ export default class App extends Component<Props> {
                             }}
                             onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
                         />
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: 37.424119,
+                                longitude: -122.103432
+                            }}
+                            onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
+                        />
                     </MapView.Animated>
                 </View>
             </View>
