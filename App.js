@@ -51,6 +51,10 @@ export default class App extends Component<Props> {
         console.log('asu')
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                this.setState({
+                    latitude : position.coords.latitude,
+                    longitude : position.coords.longitude
+                })
                 console.log("--->",position.coords.latitude)
                 console.log("--->",position.coords.longitude)
             })
@@ -63,16 +67,23 @@ export default class App extends Component<Props> {
         return (
             <View style={styles.container}>
                 <View style ={styles.container}>
-                    <MapView
+                    <MapView.Animated
                         style={styles.map}
                         region={{
-                            latitude: 37.78825,
-                            longitude: -122.4324,
+                            latitude: this.state.latitude,
+                            longitude: this.state.longitude,
                             latitudeDelta: 0.015,
                             longitudeDelta: 0.0121,
                         }}
                     >
-                    </MapView>
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: this.state.latitude,
+                                longitude: this.state.longitude
+                            }}
+                            onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}
+                        />
+                    </MapView.Animated>
                 </View>
             </View>
         );
