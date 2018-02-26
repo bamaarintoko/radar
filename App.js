@@ -49,20 +49,20 @@ export default class App extends Component<Props> {
             longitude: 0,
             data: []
         }
-        this.place = this.place.bind(this)
+        //this.place = this.place.bind(this)
     }
 
 
     componentDidMount() {
         Axios.get(url).then((response) => {
             //console.log(response)
-            response.data.results.map((v, k) => {
-                this.place(v.place_id)
-                //console.log("-->",v.place_id)
-            })
-            // this.setState({
-            //     data:response.data.results
+            // response.data.results.map((v, k) => {
+            //     this.place(v.place_id)
+            //     //console.log("-->",v.place_id)
             // })
+            this.setState({
+                data:response.data.results
+            })
         })
         console.log('asu')
         navigator.geolocation.getCurrentPosition(
@@ -76,22 +76,22 @@ export default class App extends Component<Props> {
             })
     }
 
-    place(id) {
-        Axios.get('https://maps.googleapis.com/maps/api/place/details/json?placeid=' + id + '&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4')
-            .then((response) => {
-                this.setState({
-                    data: [...this.state.data, response.data.result]
-                })
-                //console.log(response.data.result)
-                //data.push(response.data.result)
-                //let joined = this.state.data.concat(response.data.result);
-                // this.setState({
-                //     data: joined
-                // })
-                //console.log(joined)
-            })
-        //console.log(id)
-    }
+    // place(id) {
+    //     Axios.get('https://maps.googleapis.com/maps/api/place/details/json?placeid=' + id + '&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4')
+    //         .then((response) => {
+    //             this.setState({
+    //                 data: [...this.state.data, response.data.result]
+    //             })
+    //             //console.log(response.data.result)
+    //             //data.push(response.data.result)
+    //             //let joined = this.state.data.concat(response.data.result);
+    //             // this.setState({
+    //             //     data: joined
+    //             // })
+    //             //console.log(joined)
+    //         })
+    //     //console.log(id)
+    // }
 
     render() {
         const {region} = this.props;
