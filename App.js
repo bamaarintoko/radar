@@ -9,9 +9,20 @@ import {
     Platform,
     StyleSheet,
     View,
-    Dimensions, Image
+    Dimensions, Image, Picker
 } from 'react-native';
-import {Button, Container, Content, Footer, FooterTab, Form, Header, Input, Item, SwipeRow, Text} from "native-base";
+import {
+    Button,
+    Container,
+    Content,
+    Footer,
+    FooterTab,
+    Form,
+    Header,
+    Input,
+    SwipeRow,
+    Text
+} from "native-base";
 import MapView from 'react-native-maps';
 import Axios from 'axios'
 
@@ -23,6 +34,7 @@ const instructions = Platform.select({
 });
 import Geocoder from 'react-native-geocoder';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 let {width, height} = Dimensions.get('window')
 const styles = StyleSheet.create({
     container_: {
@@ -42,17 +54,25 @@ type Props = {};
 let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
 let url_ = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
 let data = []
+// const Item = Picker.Item;
 export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
             latitude: 0,
             longitude: 0,
-            data: []
+            data: [],
+            value: "Select Me Please",
+            type: ""
         }
         //this.place = this.place.bind(this)
     }
 
+    onValueChange(value: string) {
+        this.setState({
+            selected1: value
+        });
+    }
 
     componentDidMount() {
         Axios.get(url).then((response) => {
@@ -69,14 +89,22 @@ export default class App extends Component<Props> {
                 })
             })
     }
-
+    onChange(type){
+        let urll = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=5000&type='+type+'&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+        Axios.get(urll).then((response) => {
+            console.log(response)
+            this.setState({
+                data: response.data.results
+            })
+        })
+        console.log(type)
+    }
     render() {
         const {region} = this.props;
         return (
             <Container>
 
                 <Content style={styles.container_}>
-
 
 
                     <MapView.Animated
@@ -108,9 +136,7 @@ export default class App extends Component<Props> {
                                         onDragEnd={(e) => this.setState({x: e.nativeEvent.coordinate})}
                                     >
                                         <View>
-                                            <Image
-                                                style={{width: 20, height: 20}}
-                                                source={{uri: 'https://maps.gstatic.com/mapfiles/place_api/icons/doctor-71.png'}}/>
+                                            <Icon name="h-square" color={'#2196F3'} size={20}/>
                                         </View>
                                     </MapView.Marker>
                                 )
@@ -120,12 +146,35 @@ export default class App extends Component<Props> {
                 </Content>
                 <View style={{
                     height: 50, backgroundColor: '#ffffff', borderWidth: 0.5,
-                    borderColor: '#BDBDBD', borderRadius: 5, flexDirection: 'row',margin:5
+                    borderColor: '#BDBDBD', borderRadius: 5, flexDirection: 'row', margin: 5
                 }}>
+                    <Picker
+                        style={{flex:1}}
+                        selectedValue={this.state.language}
+                        onValueChange={(loc) => this.onChange(loc)}>
+                        <Picker.Item label="-- Please select type --" value="" />
+                        <Picker.Item label="Hospital" value="hospital" />
+                        <Picker.Item label="Atm" value="atm" />
+                        <Picker.Item label="Bank" value="bank" />
+                        <Picker.Item label="Cafe" value="cafe" />
+                        <Picker.Item label="Museum" value="museum" />
+                        <Picker.Item label="Restaurant" value="restaurant" />
+                        <Picker.Item label="Gas Station" value="gas_station" />
+                        <Picker.Item label="Church" value="church" />
+                        <Picker.Item label="Mosque" value="mosque" />
+                        <Picker.Item label="Hindu Temple" value="hindu_temple" />
+                    </Picker>
                 </View>
-                <View style={{position: 'absolute',
-                    bottom:20,
-                    right:20, height:40, width:40, backgroundColor:'#FFFFFF', justifyContent:'center', alignItems:'center'}}>
+                <View style={{
+                    position: 'absolute',
+                    bottom: 20,
+                    right: 20,
+                    height: 40,
+                    width: 40,
+                    backgroundColor: '#FFFFFF',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
                     <Icon name="location-arrow" color={'#2196F3'} size={20}/>
                 </View>
             </Container>
