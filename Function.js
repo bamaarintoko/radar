@@ -3,7 +3,7 @@ import React from "react";
 import {Image} from "react-native";
 
 export function icon(key) {
-    console.log(key)
+    // console.log(key)
     let sz = 50;
     let clr = '#2196F3';
     let uri = 'https://maps.gstatic.com/mapfiles/place_api/icons/doctor-71.png'

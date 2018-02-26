@@ -9,7 +9,7 @@ import {
     Platform,
     StyleSheet,
     View,
-    Dimensions, Image, Picker
+    Dimensions, Image, Picker, TouchableWithoutFeedback
 } from 'react-native';
 import {
     Button,
@@ -26,6 +26,7 @@ import {
 import MapView from 'react-native-maps';
 import Axios from 'axios'
 import {icon} from './Function'
+
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
 });
 type Props = {};
-let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+
 let url_ = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
 let data = []
 // const Item = Picker.Item;
@@ -75,25 +76,47 @@ export default class App extends Component<Props> {
     }
 
     componentDidMount() {
-        Axios.get(url).then((response) => {
-            console.log(response)
-            this.setState({
-                data: response.data.results
-            })
-        })
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+                Axios.get(url).then((response) => {
+                    console.log(response)
+                    this.setState({
+                        data: response.data.results
+                    })
+                })
+                //console.log(position)
                 this.setState({
-                    latitude: -7.795580,
-                    longitude: 110.369490
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
                 })
             })
     }
-    onChange(type){
+
+    onMyPosition() {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+                Axios.get(url).then((response) => {
+                    console.log(response)
+                    this.setState({
+                        data: response.data.results
+                    })
+                })
+                //console.log(position)
+                this.setState({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                })
+            })
+    }
+
+    onChange(type) {
         this.setState({
-            type : type
+            type: type
         })
-        let urll = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=5000&type='+type+'&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+        let urll = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=5000&type=' + type + '&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
         Axios.get(urll).then((response) => {
             console.log(response)
             this.setState({
@@ -102,6 +125,7 @@ export default class App extends Component<Props> {
         })
         console.log(type)
     }
+
     render() {
         const {region} = this.props;
         return (
@@ -152,34 +176,36 @@ export default class App extends Component<Props> {
                     borderColor: '#BDBDBD', borderRadius: 5, flexDirection: 'row', margin: 5
                 }}>
                     <Picker
-                        style={{flex:1}}
-                        selectedValue={this.state.language}
-                        onValueChange={(loc) => this.onChange(loc)}>
-                        <Picker.Item label="-- Please select type --" value="" />
-                        <Picker.Item label="Hospital" value="hospital" />
-                        <Picker.Item label="Atm" value="atm" />
-                        <Picker.Item label="Bank" value="bank" />
-                        <Picker.Item label="Cafe" value="cafe" />
-                        <Picker.Item label="Museum" value="museum" />
-                        <Picker.Item label="Restaurant" value="restaurant" />
-                        <Picker.Item label="Gas Station" value="gas_station" />
-                        <Picker.Item label="Church" value="church" />
-                        <Picker.Item label="Mosque" value="mosque" />
-                        <Picker.Item label="Hindu Temple" value="hindu_temple" />
+                        style={{flex: 1}}
+                        selectedValue={this.state.type}
+                        onValueChange={(loc) => {this.onChange(loc)}}>
+                        <Picker.Item label="-- Please select type --" value=""/>
+                        <Picker.Item label="Hospital" value="hospital"/>
+                        <Picker.Item label="Atm" value="atm"/>
+                        <Picker.Item label="Bank" value="bank"/>
+                        <Picker.Item label="Cafe" value="cafe"/>
+                        <Picker.Item label="Museum" value="museum"/>
+                        <Picker.Item label="Restaurant" value="restaurant"/>
+                        <Picker.Item label="Gas Station" value="gas_station"/>
+                        <Picker.Item label="Church" value="church"/>
+                        <Picker.Item label="Mosque" value="mosque"/>
+                        <Picker.Item label="Hindu Temple" value="hindu_temple"/>
                     </Picker>
                 </View>
-                <View style={{
-                    position: 'absolute',
-                    bottom: 20,
-                    right: 20,
-                    height: 40,
-                    width: 40,
-                    backgroundColor: '#FFFFFF',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Icon name="location-arrow" color={'#2196F3'} size={20}/>
-                </View>
+                <TouchableWithoutFeedback onPress={()=>this.onMyPosition()}>
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 20,
+                        right: 20,
+                        height: 40,
+                        width: 40,
+                        backgroundColor: '#FFFFFF',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Icon name="location-arrow" color={'#2196F3'} size={20}/>
+                    </View>
+                </TouchableWithoutFeedback>
             </Container>
         );
     }
