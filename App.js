@@ -123,6 +123,11 @@ export default class App extends Component<Props> {
                     borderColor: '#BDBDBD', borderRadius: 5, flexDirection: 'row',margin:5
                 }}>
                 </View>
+                <View style={{position: 'absolute',
+                    bottom:20,
+                    right:20, height:40, width:40, backgroundColor:'#FFFFFF'}}>
+                    <Text>a</Text>
+                </View>
             </Container>
         );
     }
