@@ -25,7 +25,7 @@ import {
 } from "native-base";
 import MapView from 'react-native-maps';
 import Axios from 'axios'
-
+import {icon} from './Function'
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -90,6 +90,9 @@ export default class App extends Component<Props> {
             })
     }
     onChange(type){
+        this.setState({
+            type : type
+        })
         let urll = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=5000&type='+type+'&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
         Axios.get(urll).then((response) => {
             console.log(response)
@@ -136,7 +139,7 @@ export default class App extends Component<Props> {
                                         onDragEnd={(e) => this.setState({x: e.nativeEvent.coordinate})}
                                     >
                                         <View>
-                                            <Icon name="h-square" color={'#2196F3'} size={20}/>
+                                            {icon(this.state.type)}
                                         </View>
                                     </MapView.Marker>
                                 )
