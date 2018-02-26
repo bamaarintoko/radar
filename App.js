@@ -22,7 +22,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 import Geocoder from 'react-native-geocoder';
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 let {width, height} = Dimensions.get('window')
 const styles = StyleSheet.create({
     container_: {
@@ -125,8 +125,8 @@ export default class App extends Component<Props> {
                 </View>
                 <View style={{position: 'absolute',
                     bottom:20,
-                    right:20, height:40, width:40, backgroundColor:'#FFFFFF'}}>
-                    <Text>a</Text>
+                    right:20, height:40, width:40, backgroundColor:'#FFFFFF', justifyContent:'center', alignItems:'center'}}>
+                    <Icon name="location-arrow" color={'#2196F3'} size={20}/>
                 </View>
             </Container>
         );
