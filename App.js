@@ -8,10 +8,10 @@ import React, {Component} from 'react';
 import {
     Platform,
     StyleSheet,
-    Text,
     View,
     Dimensions, Image
 } from 'react-native';
+import {Button, Container, Content, Footer, FooterTab, Form, Header, Input, Item, SwipeRow, Text} from "native-base";
 import MapView from 'react-native-maps';
 import Axios from 'axios'
 
@@ -21,20 +21,21 @@ const instructions = Platform.select({
     android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
+import Geocoder from 'react-native-geocoder';
+
 let {width, height} = Dimensions.get('window')
 const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
+    container_: {
+        ...StyleSheet.absoluteFillObject,
+        alignSelf: 'flex-end',
+        marginTop: -5,
+        position: 'absolute', // add if dont work with above
     },
     map: {
         width: width,
-        height: height
+        height: height,
+        alignSelf: 'flex-end',
+        marginTop: -5,
     },
 });
 type Props = {};
@@ -55,50 +56,29 @@ export default class App extends Component<Props> {
 
     componentDidMount() {
         Axios.get(url).then((response) => {
-            //console.log(response)
-            // response.data.results.map((v, k) => {
-            //     this.place(v.place_id)
-            //     //console.log("-->",v.place_id)
-            // })
+            console.log(response)
             this.setState({
-                data:response.data.results
+                data: response.data.results
             })
         })
-        console.log('asu')
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 this.setState({
                     latitude: -7.795580,
                     longitude: 110.369490
                 })
-                console.log("--->", position.coords.latitude)
-                console.log("--->", position.coords.longitude)
             })
     }
 
-    // place(id) {
-    //     Axios.get('https://maps.googleapis.com/maps/api/place/details/json?placeid=' + id + '&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4')
-    //         .then((response) => {
-    //             this.setState({
-    //                 data: [...this.state.data, response.data.result]
-    //             })
-    //             //console.log(response.data.result)
-    //             //data.push(response.data.result)
-    //             //let joined = this.state.data.concat(response.data.result);
-    //             // this.setState({
-    //             //     data: joined
-    //             // })
-    //             //console.log(joined)
-    //         })
-    //     //console.log(id)
-    // }
-
     render() {
         const {region} = this.props;
-        console.log("--->", this.state.data);
         return (
-            <View style={styles.container}>
-                <View style={styles.container}>
+            <Container>
+
+                <Content style={styles.container_}>
+
+
+
                     <MapView.Animated
                         style={styles.map}
                         region={{
@@ -117,7 +97,7 @@ export default class App extends Component<Props> {
                         />
                         {
                             this.state.data.map((v, k) => {
-                                console.log("-->",v)
+                                //console.log("-->",v)
                                 return (
                                     <MapView.Marker
                                         key={k}
@@ -128,7 +108,6 @@ export default class App extends Component<Props> {
                                         onDragEnd={(e) => this.setState({x: e.nativeEvent.coordinate})}
                                     >
                                         <View>
-                                            <Text>hos</Text>
                                             <Image
                                                 style={{width: 20, height: 20}}
                                                 source={{uri: 'https://maps.gstatic.com/mapfiles/place_api/icons/doctor-71.png'}}/>
@@ -137,17 +116,14 @@ export default class App extends Component<Props> {
                                 )
                             })
                         }
-
-                        {/*<MapView.Marker*/}
-                        {/*coordinate={{*/}
-                        {/*latitude: -7.7835968,*/}
-                        {/*longitude: 110.3777088*/}
-                        {/*}}*/}
-                        {/*onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })}*/}
-                        {/*/>*/}
                     </MapView.Animated>
+                </Content>
+                <View style={{
+                    height: 50, backgroundColor: '#ffffff', borderWidth: 0.5,
+                    borderColor: '#BDBDBD', borderRadius: 5, flexDirection: 'row',margin:5
+                }}>
                 </View>
-            </View>
+            </Container>
         );
     }
 }
