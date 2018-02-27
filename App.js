@@ -81,7 +81,7 @@ export default class App extends Component<Props> {
             (position) => {
                 let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
                 Axios.get(url).then((response) => {
-                    console.log(response)
+                    //console.log(response)
                     this.setState({
                         data: response.data.results
                     })
@@ -97,9 +97,9 @@ export default class App extends Component<Props> {
     onMyPosition() {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=1000&type=hospital&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
+                let url = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=1000&type='+this.state.type+'&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
                 Axios.get(url).then((response) => {
-                    console.log(response)
+                    //console.log(response)
                     this.setState({
                         data: response.data.results
                     })
@@ -118,12 +118,12 @@ export default class App extends Component<Props> {
         })
         let urll = 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=-7.795580,110.369490&radius=5000&type=' + type + '&key=AIzaSyDV81G_vdgQeSlMd2Z3Suc-FM7x3tNO-j4'
         Axios.get(urll).then((response) => {
-            console.log(response)
+            //console.log(response)
             this.setState({
                 data: response.data.results
             })
         })
-        console.log(type)
+        //console.log(type)
     }
 
     render() {
